@@ -27,9 +27,7 @@ To install Employee Tracker:
   - Then input `\i seeds.sql` 
   -After this, your database should be correctly set up.
 
-- User will need to Remove '.EXAMPLE' from the '.env.EXAMPLE'
-
-- User will then fill out that '.env' file with their own credentials.
+- User may need to fill in their own postgres password in the `connection.js` file if applicable.
 
 ## Usage
 
