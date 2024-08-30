@@ -82,6 +82,48 @@ function viewRoles() {
   });
 }
 
+function addRole() {
+  inquirer.prompt([
+    {
+        type: 'input',
+        message: 'what is the name of the role?',
+        name: 'role'
+    },
+    {
+        type: 'input',
+        message: 'Enter the roles salary.',
+        name: 'salary'
+    },
+    {
+        type: 'list',
+        message: 'What department does the role belong to?',
+        choices: ['Opener', 'Closer', 'Sales Manager','Payroll Manager', 'Account Manager','Quality Assurance'],
+        name: 'departmentName'
+    },
+    {
+        type: 'confirm',
+        message: 'Add new role?',
+        name: 'newRole'
+    },
+  ])
+
+  .then((answers) => {
+      console.log(answers);
+  })
+
+}
+
+function updateEmployee() {
+  const query = 'SELECT first_name FROM employee;';
+  db.query(query, (err, { rows }) => {
+      if (err) {
+          res.status(500).json({ error: err.message });
+          return;
+      }
+      console.table(rows)
+  });
+}
+
 function init() {
   inquirer.prompt([
     {
@@ -110,6 +152,12 @@ function init() {
         break;
       case 'View All Roles':
         viewRoles(); 
+        break;
+      case 'Add Role':
+        addRole(); 
+        break;
+      case 'Update Employee Role':
+        updateEmployee(); 
         break;
     }
 
