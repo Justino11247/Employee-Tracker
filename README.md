@@ -33,7 +33,7 @@ To install Employee Tracker:
 
 ## Usage
 
-- Run the following command in your terminal to start the application: `node index.js`
+- Run the following command in your terminal to start the application: `node server.js`
 
 - Adhere to the application's guided prompts to navigate through the menu choices.
 
