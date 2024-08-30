@@ -43,6 +43,45 @@ function addEmployee() { //Inquirer function to add a new employee
   ])
 }
 
+function viewDepartments() {
+  const sql = "SELECT * FROM department;";
+
+  db.query(sql, (err, { rows }) => {
+
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    console.table(rows)
+
+  });
+}
+
+function addDepartment() {
+  inquirer.prompt([
+    {
+    type: 'input',
+    message: 'What is the name of the department?',
+    name: 'addDepartment'
+    },
+  ])
+  .then((data) => {
+    console.log(data); 
+  })
+}
+
+function viewRoles() {
+  const query = 'SELECT * FROM role;';
+  db.query(query, (err, { rows }) => {
+
+    if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+    }
+    console.table(rows)
+  });
+}
+
 function init() {
   inquirer.prompt([
     {
@@ -62,6 +101,15 @@ function init() {
         break;
       case 'Add employee':
         addEmployee();
+        break;
+      case 'View All Departments':
+        viewDepartments(); 
+        break;
+      case 'Add Department':
+        addDepartment(); 
+        break;
+      case 'View All Roles':
+        viewRoles(); 
         break;
     }
 
