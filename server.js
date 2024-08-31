@@ -124,16 +124,27 @@ async function viewDepartments() {
 
 
 function addDepartment() {
-  inquirer.prompt([
+  return inquirer.prompt([
     {
-    type: 'input',
-    message: 'What is the name of the department?',
-    name: 'addDepartment'
-    },
+      type: 'input',
+      message: 'What is the name of the department?',
+      name: 'departmentName',
+      validate: input => input.trim() !== '' || 'Department name cannot be empty.'
+    }
   ])
-  .then((data) => {
-    console.log(data); 
+  .then((answer) => {
+    const query = 'INSERT INTO department (name) VALUES ($1)';
+    return db.query(query, [answer.departmentName]);
   })
+  .then(() => {
+    console.log('Department added successfully!');
+  })
+  .catch((error) => {
+    console.error('Error adding department:', error);
+  })
+  .finally(() => {
+    return init(); // This will redirect to the initial prompt
+  });
 }
 
 function viewRoles() {
@@ -164,36 +175,43 @@ function viewRoles() {
 }
 
 
-function addRole() {
-  inquirer.prompt([
-    {
+async function addRole() {
+  try {
+    // Fetch departments for choices
+    const departments = await db.query('SELECT id, name FROM department');
+
+    const { title, salary, departmentId } = await inquirer.prompt([
+      {
         type: 'input',
-        message: 'what is the name of the role?',
-        name: 'role'
-    },
-    {
+        message: 'Enter the title of the new role:',
+        name: 'title',
+      },
+      {
         type: 'input',
-        message: 'Enter the roles salary.',
-        name: 'salary'
-    },
-    {
+        message: 'Enter the salary for this role:',
+        name: 'salary',
+        validate: input => !isNaN(input) || 'Please enter a valid number',
+      },
+      {
         type: 'list',
-        message: 'What department does the role belong to?',
-        choices: ['Opener', 'Closer', 'Sales Manager','Payroll Manager', 'Account Manager','Quality Assurance'],
-        name: 'departmentName'
-    },
-    {
-        type: 'confirm',
-        message: 'Add new role?',
-        name: 'newRole'
-    },
-  ])
+        message: 'Select the department for this role:',
+        choices: departments.rows.map(dept => ({ name: dept.name, value: dept.id })),
+        name: 'departmentId',
+      }
+    ]);
 
-  .then((answers) => {
-      console.log(answers);
-  })
-
+    const query = 'INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)';
+    await db.query(query, [title, salary, departmentId]);
+    console.log('Role added successfully!');
+  } catch (error) {
+    console.error('Error adding role:', error);
+  } finally {
+    // This ensures that init() is called whether the operation succeeds or fails
+    init();
+  }
 }
+
+
 
 function updateEmployeeRole() {
   let employees, roles;
@@ -281,9 +299,6 @@ function init() {
         return addRole(); 
       case 'Update Employee Role':
         return updateEmployeeRole(); 
-      case 'Exit':
-        console.log('Goobye!');
-        process.exit(0);
     }
   })
 };

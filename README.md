@@ -22,9 +22,10 @@ To install Employee Tracker:
 
 - Set up the PostgreSQL database:
 
+  - Open Integrated Terminal from the DB folder.
   - Input `psql -U postgres` to open PostgreSQL command line interface, input password if needed.
-  - Set up database by inserting schema.sql and seeds.sql files using `\i schema.sql`
-  - Then input `\i seeds.sql` 
+  - Set up database by inserting schema.sql and seeds.sql files using `\i db/schema.sql`
+  - Then input `\i db/seeds.sql` 
   -After this, your database should be correctly set up.
 
 - User may need to fill in their own postgres password in the `connection.js` file if applicable.
@@ -35,7 +36,7 @@ To install Employee Tracker:
 
 - Adhere to the application's guided prompts to navigate through the menu choices.
 
-[Link to Walk Through Video]
+[Link to Walk Through Video](https://drive.google.com/file/d/1pDa264Sl43AcTyaT8IYdtqQeyzYH53OD/view)
 
-![Screenshot of HRTracker]
+![Screenshot of HRTracker](./images/app.png)
 
